@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asumare responsabilitate — Nagomir Emilian</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<nav class="navbar no-print">
+  <span class="nav-brand">// <span>nagomir-emilian.cv</span></span>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Acasă</a></li>
+    <li><a href="cv.html">Curriculum Vitae</a></li>
+    <li><a href="probleme.html">Probleme Practică</a></li>
+    <li><a href="polimorfism.html">Polimorfism</a></li>
+    <li><a href="asumare.html" class="active">Asumare responsabilitate</a></li>
+  </ul>
+  <button class="burger" id="burger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-header no-print">
+  <div class="badge">Document · Practică</div>
+  <h1>Declarația privind<br>asumarea răspunderii</h1>
+  <p>Document pentru raportul de practică — semnare și confirmare că materialele prezentate sunt proprii.</p>
+</div>
+
+<div class="asumare-wrap">
+
+  <div class="doc-card">
+
+    <p class="doc-text">
+      Eu subsemnatul, <strong>Nagomir Emilian</strong>, declar pe proprie răspundere că materialele
+      prezentate în raport se referă la propriile activități și realizări; în caz contrar urmează să
+      suport consecințele, în conformitate cu legislația în vigoare.
+    </p>
+
+    <div class="doc-field">
+      <label>Data</label>
+      <div class="val val-date" id="docDate"></div>
+    </div>
+
+    <div class="doc-field">
+      <label>Nume, Prenume</label>
+      <div class="val">Nagomir Emilian</div>
+    </div>
+
+    <div class="doc-field sig-area">
+      <label>Semnătura</label>
+      <div class="sig-preview" id="sigPreview">
+        <object type="image/svg+xml" data="signature (1).svg" class="sig-file-preview" aria-label="Preview semnătură SVG">Semnătura nu poate fi afișată.</object>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="no-print"><p>Nagomir Emilian · Practică de instruire · <span id="yr"></span></p></footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+document.getElementById('burger').addEventListener('click', () =>
+  document.getElementById('navLinks').classList.toggle('open'));
+
+// Set current date
+const now = new Date();
+const zi = String(now.getDate()).padStart(2,'0');
+const luna = String(now.getMonth()+1).padStart(2,'0');
+const an = now.getFullYear();
+document.getElementById('docDate').textContent = `${zi}.${luna}.${an}`;
+
+// ===== SVG SIGNATURE ATTACHMENT =====
+
+</script>
+</body>
+</html>

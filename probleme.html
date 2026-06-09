@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Probleme Practică — Nagomir Emilian</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="nav-brand">// <span>nagomir-emilian.cv</span></span>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Acasă</a></li>
+    <li><a href="cv.html">Curriculum Vitae</a></li>
+    <li><a href="probleme.html" class="active">Probleme Practică</a></li>
+    <li><a href="polimorfism.html">Polimorfism</a></li>
+    <li><a href="asumare.html">Asumare responsabilitate</a></li>
+  </ul>
+  <button class="burger" id="burger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-header">
+  <div class="badge">Practică · C#</div>
+  <h1>Probleme rezolvate</h1>
+  <p>11 probleme din cadrul practicii de instruire — cod sursă, output și timp de rezolvare.</p>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <img id="lbImg" src="" alt="Output" />
+</div>
+
+<!-- COD EXPANDAT -->
+<div class="code-modal" id="codeModal">
+  <div class="code-modal-box" role="dialog" aria-modal="true" aria-labelledby="codeModalTitle">
+    <div class="code-modal-header">
+      <h2 id="codeModalTitle">Cod complet</h2>
+      <button class="btn btn-ghost btn-sm" id="closeCodeBtn" type="button">Închide</button>
+    </div>
+    <div class="code-modal-body" id="codeModalBody"></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="problems-grid" id="grid"></div>
+  <div class="more-problems">
+    <a class="btn btn-primary" href="#" id="allProblemsBtn">Toate problemele</a>
+  </div>
+</div>
+
+<footer><p>Nagomir Emilian · Practică de instruire · <span id="yr"></span></p></footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+document.getElementById('burger').addEventListener('click', () =>
+  document.getElementById('navLinks').classList.toggle('open'));
+
+// ══════════════════════════════════════════════════════════════════
+//  PROBLEME — editează fiecare obiect cu datele tale
+//
+//  • title   — titlul problemei
+//  • date    — data rezolvării
+//  • time    — cât timp ți-a luat
+//  • imgs    — lista de fișiere cu screenshot-uri/output (album foto)
+//              (pune fișierele în același folder cu probleme.html)
+//              Dacă nu ai screenshot încă, lasă imgs: [] sau img: ""
+//  • img     — compatibilitate veche pentru un singur screenshot
+//  • code    — codul C# ca text simplu (fără tag-uri HTML)
+// ══════════════════════════════════════════════════════════════════
+const PROBLEMS = [
+  {
+    id: 1,
+    title: "Tehnica Trierii - M1.4",
+    date: "15 ian. 2025",
+    time: "~20 min",
+    imgs: ["m1.4/Inputm14.png", "m1.4/Outputm14.png"],        // ex: "output1.png"
+    code:
+`using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        
+        StreamReader fin = new StreamReader("numerein.txt");
+        
+        int n = int.Parse(fin.ReadLine());
+        int a = int.Parse(fin.ReadLine());
+        int b = int.Parse(fin.ReadLine());
+        
+        fin.Close();
+
+        
+        StreamWriter fout = new StreamWriter("numereout.txt");
+
+        
+        for (int numar = 1; numar <= n; numar++)
+        {
+        
+            int sumaCifre = 0;
+            int copie = numar;  
+            
+            while (copie > 0)
+            {
+                sumaCifre = sumaCifre + copie % 10; 
+                copie = copie / 10;                 
+            }
+
+            
+            if (sumaCifre % a == 0 && sumaCifre % b == 0)
+            {
+                fout.Write(numar + " ");
+            }
+        }
+
+        fout.Close();
+    }
+}`
+  },
+  {
+    id: 2,
+    title: "Tehnica Greedy - M2.8",
+    date: "20 ian. 2025",
+    time: "~35 min",
+    imgs: ["m2.8/Inputm28.png", "m2.8/Outputm28.png"],
+    code:
+`
+using System;
+using System.IO;
+
+class Program
+{
+    
+    static int[] dx = { 2, 1, -1, -2, -2, -1, 1, 2 };
+    static int[] dy = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
+    static void Main()
+    {
+        
+        StreamReader fin = new StreamReader("calin.txt");
+        int n = int.Parse(fin.ReadLine());
+        fin.Close();
+
+        
+        int[,] tabla = new int[n, n];
+
+        
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                tabla[i, j] = 0;
+
+        
+        int x = 0, y = 0;
+        tabla[x, y] = 1;
+
+        
+        double cx = (n - 1) / 2.0;
+        double cy = (n - 1) / 2.0;
+
+        
+        for (int mutare = 2; mutare <= n * n; mutare++)
+        {
+            int minGrad = 9;
+            double maxDist = -1;
+            int urmX = -1, urmY = -1;
+            bool gasit = false;
+
+            
+            for (int k = 0; k < 8; k++)
+            {
+                int nx = x + dx[k];
+                int ny = y + dy[k];
+
+               
+                if (nx >= 0 && nx < n && ny >= 0 && ny < n && tabla[nx, ny] == 0)
+                {
+                    
+                    int grad = 0;
+                    for (int m = 0; m < 8; m++)
+                    {
+                        int nnx = nx + dx[m];
+                        int nny = ny + dy[m];
+                        if (nnx >= 0 && nnx < n && nny >= 0 && nny < n && tabla[nnx, nny] == 0)
+                            grad++;
+                    }
+
+                    
+                    double dist = (nx - cx) * (nx - cx) + (ny - cy) * (ny - cy);
+
+                    
+                    if (grad < minGrad || (grad == minGrad && dist > maxDist))
+                    {
+                        minGrad = grad;
+                        maxDist = dist;
+                        urmX = nx;
+                        urmY = ny;
+                        gasit = true;
+                    }
+                }
+            }
+
+            if (!gasit)
+            {
+                Console.WriteLine("Algoritmul nu a gasit solutie completa!");
+                break;
+            }
+
+            x = urmX;
+            y = urmY;
+            tabla[x, y] = mutare;
+        }
+
+
+        StreamWriter fout = new StreamWriter("calout.txt");
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+                fout.Write(tabla[i, j].ToString().PadLeft(4) + " ");
+            fout.WriteLine();
+        }
+        fout.Close();
+    }
+}
+`
+  },
+  {
+    id: 3,
+    title: "Tehnica Reluării - M3.17",
+    date: "28 ian. 2025",
+    time: "~40 min",
+    imgs: ["m3.17/Inputm317.png", "m3.17/Outputm317.png"],
+    code:
+`
+using System;
+using System.IO;
+
+class Program
+{
+    static int n, m;
+    static int[,] nums = new int[0, 0];        
+    static int[] matches = new int[10];      
+    static int[,] pairs = new int[10, 2];       
+    static StreamWriter? fout;
+
+    static void Main()
+    {
+        string inputPath = "numerein.txt";
+        string outputPath = "numereout.txt";
+
+       
+        if (!File.Exists(inputPath))
+        {
+            Console.WriteLine("Eroare: Fisierul numerein.txt nu exista!");
+            return;
+        }
+
+        using (StreamReader fin = new StreamReader(inputPath))
+        {
+            string? line1 = fin.ReadLine();
+            string? line2 = fin.ReadLine();
+            
+            if (line1 == null || line2 == null)
+            {
+                Console.WriteLine("Eroare: Fisierul de intrare nu are destule linii.");
+                return;
+            }
+
+            n = int.Parse(line1);
+            m = int.Parse(line2);
+        }
+
+       
+        if (!((2.0 * n / 5 <= m) && (m <= n / 2.0) && ((n - m) % 2 == 0)))
+        {
+            Console.WriteLine("Nu exista solutie pentru n=" + n + " si m=" + m);
+            Console.WriteLine("Conditii: 2n/5 <= m <= n/2 si n-m par");
+            return;
+        }
+
+        nums = new int[5, n];
+        matches = new int[10];
+        pairs = new int[10, 2];
+     
+        int idx = 0;
+        for (int i = 0; i < 5; i++)
+            for (int j = i + 1; j < 5; j++)
+            {
+                pairs[idx, 0] = i;
+                pairs[idx, 1] = j;
+                idx++;
+            }
+
+        
+        if (Backtrack(0))
+        {
+            // Scriere rezultat
+            using (StreamWriter fout = new StreamWriter(outputPath))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                        fout.Write(nums[i, j]);
+                    fout.WriteLine();
+                }
+            }
+
+            Console.WriteLine("Solutia a fost scrisa in numereout.txt");
+        }
+        else
+        {
+            Console.WriteLine("Nu s-a gasit solutie.");
+        }
+    }
+
+    static bool Backtrack(int pos)
+    {
+        if (pos == n)
+        {
+            
+            for (int i = 0; i < 10; i++)
+                if (matches[i] != m)
+                    return false;
+            return true;
+        }
+
+        
+        for (int mask = 1; mask <= 30; mask++)
+        {
+            bool valid = true;
+            int[] addedMatches = new int[10]; 
+
+            for (int p = 0; p < 10; p++)
+            {
+                int i = pairs[p, 0];
+                int j = pairs[p, 1];
+                int ci = ((mask >> i) & 1) == 1 ? 2 : 1;
+                int cj = ((mask >> j) & 1) == 1 ? 2 : 1;
+
+                if (ci == cj)
+                {
+                    addedMatches[p] = 1;
+                    if (matches[p] + 1 > m)  
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+
+            if (!valid) continue;
+
+       
+            int remaining = n - pos - 1;
+            for (int p = 0; p < 10; p++)
+            {
+                if (matches[p] + addedMatches[p] + remaining < m)
+                {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if (!valid) continue;
+
+           
+            for (int p = 0; p < 10; p++)
+            {
+                matches[p] += addedMatches[p];
+            }
+            
+            for (int i = 0; i < 5; i++)
+            {
+                nums[i, pos] = ((mask >> i) & 1) == 1 ? 2 : 1;
+            }
+
+       
+            if (Backtrack(pos + 1))
+            {
+                return true;
+            }
+
+          
+            for (int p = 0; p < 10; p++)
+            {
+                matches[p] -= addedMatches[p];
+            }
+        }
+
+        return false;
+    }
+}
+`
+  },
+  {
+    id: 4,
+    title: "Tehnica Reluării - M3.29",
+    date: "05 feb. 2025",
+    time: "~50 min",
+    imgs: ["m3.29/Inputm329.png", "m3.29/Outputm329.png"],
+    code:
+`
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+class Program
+{
+    static int c, m;                    
+    static List<string> solutii;        
+    static int numarSolutii;
+
+    static void Main()
+    {
+        
+        StreamReader fin = new StreamReader("canibaliin.txt");
+        c = int.Parse(fin.ReadLine());
+        m = int.Parse(fin.ReadLine());
+        fin.Close();
+
+        solutii = new List<string>();
+        numarSolutii = 0;
+
+    
+        List<string> drum = new List<string>();
+        HashSet<string> vizitat = new HashSet<string>();
+        
+        vizitat.Add("" + c + "," + m + ",1");
+        Backtrack(c, m, 1, drum, vizitat);
+
+    
+        StreamWriter fout = new StreamWriter("canibaliout.txt");
+        fout.WriteLine("Numar total solutii: " + numarSolutii);
+        fout.WriteLine();
+        
+        for (int i = 0; i < solutii.Count; i++)
+        {
+            fout.WriteLine("=== SOLUTIA " + (i + 1) + " ===");
+            fout.WriteLine(solutii[i]);
+            fout.WriteLine();
+        }
+        fout.Close();
+
+        Console.WriteLine("Gata! S-au gasit " + numarSolutii + " solutii.");
+    }
+
+
+    static bool EsteSigur(int cs, int ms)
+    {
+        int cd = c - cs;  
+        int md = m - ms;  
+
+       
+        if (ms > 0 && cs > ms)
+            return false;
+
+    
+        if (md > 0 && cd > md)
+            return false;
+
+        return true;
+    }
+
+    
+    static void Backtrack(int cs, int ms, int barca, List<string> drum, HashSet<string> vizitat)
+    {
+        
+        if (cs == 0 && ms == 0 && barca == 0)
+        {
+            numarSolutii++;
+            
+            
+            string text = "";
+            text += "Start: (" + c + "C, " + m + "M) pe malul stang\n";
+            
+            int cCurent = c, mCurent = m;
+            for (int i = 0; i < drum.Count; i++)
+            {
+                string[] parts = drum[i].Split(',');
+                int dc = int.Parse(parts[0]);
+                int dm = int.Parse(parts[1]);
+                string dir = parts[2];
+                
+                if (dir == ">")
+                {
+                    cCurent -= dc;
+                    mCurent -= dm;
+                    text += "Pas " + (i + 1) + ": Barca duce " + dc + " canibali + " 
+                          + dm + " misionari -> DREPT | Stang: (" 
+                          + cCurent + "C, " + mCurent + "M)\n";
+                }
+                else
+                {
+                    cCurent += dc;
+                    mCurent += dm;
+                    text += "Pas " + (i + 1) + ": Barca duce " + dc + " canibali + " 
+                          + dm + " misionari <- STANG | Stang: (" 
+                          + cCurent + "C, " + mCurent + "M)\n";
+                }
+            }
+            
+            solutii.Add(text);
+            return;
+        }
+
+        
+        int[,] mutari = { {1,0}, {2,0}, {0,1}, {0,2}, {1,1} };
+
+        if (barca == 1) 
+        {
+            for (int k = 0; k < 5; k++)
+            {
+                int dc = mutari[k, 0];
+                int dm = mutari[k, 1];
+
+                
+                if (dc <= cs && dm <= ms && dc + dm >= 1 && dc + dm <= 2)
+                {
+                    int ncs = cs - dc;
+                    int nms = ms - dm;
+                    int nbarca = 0;
+
+                    if (EsteSigur(ncs, nms))
+                    {
+                        string stare = "" + ncs + "," + nms + "," + nbarca;
+                        if (!vizitat.Contains(stare))
+                        {
+                            vizitat.Add(stare);
+                            drum.Add(dc + "," + dm + ",>");
+                            
+                            Backtrack(ncs, nms, nbarca, drum, vizitat);
+                            
+                           
+                            drum.RemoveAt(drum.Count - 1);
+                            vizitat.Remove(stare);
+                        }
+                    }
+                }
+            }
+        }
+        else  
+        {
+            for (int k = 0; k < 5; k++)
+            {
+                int dc = mutari[k, 0];
+                int dm = mutari[k, 1];
+
+                int cd = c - cs;
+                int md = m - ms;
+
+                if (dc <= cd && dm <= md && dc + dm >= 1 && dc + dm <= 2)
+                {
+                    int ncs = cs + dc;
+                    int nms = ms + dm;
+                    int nbarca = 1;
+
+                    if (EsteSigur(ncs, nms))
+                    {
+                        string stare = "" + ncs + "," + nms + "," + nbarca;
+                        if (!vizitat.Contains(stare))
+                        {
+                            vizitat.Add(stare);
+                            drum.Add(dc + "," + dm + ",<");
+                            
+                            Backtrack(ncs, nms, nbarca, drum, vizitat);
+                            
+                            
+                            drum.RemoveAt(drum.Count - 1);
+                            vizitat.Remove(stare);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+`
+  },
+  {
+    id: 5,
+    title: "Aranjamente și combinări - M4.1",
+    date: "12 feb. 2025",
+    time: "~45 min",
+    imgs: ["m4.1/Inputm41.png", "m4.1/Outputm41.png"],
+    code:
+`
+using System;
+using System.IO;
+
+class Program
+{
+    static int p;              
+    static int[] cifre;           
+    static int numarTotal;        
+    static StreamWriter fout;
+
+    static void Main()
+    {
+        Console.Write("Introduceti numarul de cifre p = ");
+        p = int.Parse(Console.ReadLine());
+
+        if (p < 1 || p > 9)
+        {
+            Console.WriteLine("p trebuie sa fie intre 1 si 9!");
+            return;
+        }
+
+        cifre = new int[p];
+        numarTotal = 0;
+        
+        fout = new StreamWriter("numereout.txt");
+        fout.WriteLine("Numerele cu " + p + " cifre distincte ordonate crescator:");
+        fout.WriteLine();
+        Backtrack(0, 1); 
+
+        fout.WriteLine();
+        fout.WriteLine("Numar total: " + numarTotal);
+        fout.Close();
+
+        Console.WriteLine("Gata! S-au generat " + numarTotal + " numere.");
+        Console.WriteLine("Formula: C(9, " + p + ") = " + Combinari(9, p));
+    }
+
+    
+    static void Backtrack(int pos, int minCifra)
+    {
+        
+        if (pos == p)
+        {
+            
+            numarTotal++;
+            for (int i = 0; i < p; i++)
+                fout.Write(cifre[i]);
+            fout.WriteLine();
+            return;
+        }
+
+        for (int cif = minCifra; cif <= 9; cif++)
+        {
+            
+            cifre[pos] = cif;    
+            Backtrack(pos + 1, cif + 1);
+
+    
+    
+        }
+    }
+
+    
+    static long Combinari(int n, int k)
+    {
+        if (k > n) return 0;
+        if (k == 0 || k == n) return 1;
+        
+        long rez = 1;
+        for (int i = 0; i < k; i++)
+            rez = rez * (n - i) / (i + 1);
+        return rez;
+    }
+}
+`
+  },
+  {
+    id: 6,
+    title: "Tehnica Desparte și stăpânește - M5.3",
+    date: "19 feb. 2025",
+    time: "~1h 10min",
+    imgs: ["m5.3/Inputm53.png", "m5.3/Outputm53.png"],
+    code:
+`
+using System;
+using System.IO;
+
+class Program
+{
+    static int[] v;
+    static int n;
+
+    static void Main()
+    {
+        StreamReader fin = new StreamReader("selectiein.txt");
+        n = int.Parse(fin.ReadLine());
+
+        v = new int[n];
+        string[] valori = fin.ReadLine().Split(' ');
+        for (int i = 0; i < n; i++)
+            v[i] = int.Parse(valori[i]);
+
+        int t = int.Parse(fin.ReadLine());
+        fin.Close();
+
+        if (t < 1 || t > n)
+        {
+            Console.WriteLine("t trebuie sa fie intre 1 si " + n);
+            return;
+        }
+
+        int rezultat = QuickSelect(0, n - 1, t);
+
+        StreamWriter fout = new StreamWriter("selectieout.txt");
+        fout.WriteLine(rezultat);
+        fout.Close();
+
+        Console.WriteLine("Al " + t + "-lea cel mai mic element este: " + rezultat);
+    }
+
+    static int QuickSelect(int st, int dr, int t)
+    {
+        if (st == dr)
+            return v[st];
+
+        int pivotIndex = Partition(st, dr);
+        int k = pivotIndex - st + 1;
+
+        if (t == k)
+            return v[pivotIndex];
+        else if (t < k)
+            return QuickSelect(st, pivotIndex - 1, t);
+        else
+            return QuickSelect(pivotIndex + 1, dr, t - k);
+    }
+
+    static int Partition(int st, int dr)
+    {
+        int pivot = v[dr];
+        int i = st - 1;
+
+        for (int j = st; j < dr; j++)
+        {
+            if (v[j] <= pivot)
+            {
+                i++;
+                int temp = v[i];
+                v[i] = v[j];
+                v[j] = temp;
+            }
+        }
+
+        int aux = v[i + 1];
+        v[i + 1] = v[dr];
+        v[dr] = aux;
+
+        return i + 1;
+    }
+}
+`
+  },
+  {
+    id: 7,
+    title: "Tehnica Programării Dinamice - M6.23",
+    date: "26 feb. 2025",
+    time: "~30 min",
+    imgs: ["m6.23/Inputm623.png", "m6.23/Outputm623.png"],
+    code:
+`
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+
+        StreamReader fin = new StreamReader("submatricein.txt");
+
+        string[] dim = fin.ReadLine().Split(' ');
+        int m = int.Parse(dim[0]);
+        int n = int.Parse(dim[1]);
+
+        int[,] a = new int[m, n];
+
+        for (int i = 0; i < m; i++)
+        {
+            string[] linie = fin.ReadLine().Split(' ');
+            for (int j = 0; j < n; j++)
+                a[i, j] = int.Parse(linie[j]);
+        }
+        fin.Close();
+
+
+
+
+        int[,] dp = new int[m, n];
+
+        int maxDim = 0;
+        int maxI = 0;
+        int maxJ = 0;
+
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (a[i, j] == 1)
+                {
+                    if (i == 0 || j == 0)
+                    {
+
+                        dp[i, j] = 1;
+                    }
+                    else
+                    {
+
+                        int min = dp[i - 1, j];
+                        if (dp[i, j - 1] < min) min = dp[i, j - 1];
+                        if (dp[i - 1, j - 1] < min) min = dp[i - 1, j - 1];
+
+                        dp[i, j] = 1 + min;
+                    }
+
+
+                    if (dp[i, j] > maxDim)
+                    {
+                        maxDim = dp[i, j];
+                        maxI = i;
+                        maxJ = j;
+                    }
+                }
+                else
+                {
+                    dp[i, j] = 0;
+                }
+            }
+        }
+
+
+        StreamWriter fout = new StreamWriter("submatriceout.txt");
+
+        fout.WriteLine("Dimensiune maxima: " + maxDim);
+        fout.WriteLine("Colt dreapta-jos: (" + maxI + ", " + maxJ + ")");
+        fout.WriteLine("Colt stanga-sus: (" + (maxI - maxDim + 1) + ", " + (maxJ - maxDim + 1) + ")");
+        fout.WriteLine();
+        fout.WriteLine("Submatricea:");
+
+        for (int i = maxI - maxDim + 1; i <= maxI; i++)
+        {
+            for (int j = maxJ - maxDim + 1; j <= maxJ; j++)
+                fout.Write(a[i, j] + " ");
+            fout.WriteLine();
+        }
+
+        fout.Close();
+
+        Console.WriteLine("Dimensiune maxima: " + maxDim);
+        Console.WriteLine("Rezultatul e in fisierul submatrice.out");
+    }
+}
+
+`
+  },
+  {
+    id: 8,
+    title: "Tehnica Programării Dinamice - M6.4",
+    date: "05 mar. 2025",
+    time: "~25 min",
+    imgs: ["m6.4/Inputm64.png", "m6.4/Outputm64.png"],
+    code:
+`
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+
+        StreamReader fin = new StreamReader("raftin.txt");
+
+        int L = int.Parse(fin.ReadLine());
+        int n = int.Parse(fin.ReadLine());
+
+        int[] grosime = new int[n + 1];
+        string[] valori = fin.ReadLine().Split(' ');
+        for (int i = 1; i <= n; i++)
+            grosime[i] = int.Parse(valori[i - 1]);
+
+        fin.Close();
+
+
+
+
+
+        int[,] dp = new int[n + 1, L + 1];
+
+
+        for (int i = 0; i <= n; i++)
+            for (int s = 0; s <= L; s++)
+                dp[i, s] = -1;
+        dp[0, 0] = 0;
+
+        for (int i = 1; i <= n; i++)
+        {
+            for (int s = 0; s <= L; s++)
+            {
+
+                dp[i, s] = dp[i - 1, s];
+
+
+                if (s >= grosime[i] && dp[i - 1, s - grosime[i]] >= 0)
+                {
+                    int cuCarte = dp[i - 1, s - grosime[i]] + 1;
+                    if (cuCarte > dp[i, s])
+                        dp[i, s] = cuCarte;
+                }
+            }
+        }
+
+
+        StreamWriter fout = new StreamWriter("raftout.txt");
+
+        if (dp[n, L] < 0)
+        {
+            fout.WriteLine("Nu exista solutie! Raftul nu poate fi umplut complet.");
+            fout.Close();
+            Console.WriteLine("Nu exista solutie!");
+            return;
+        }
+
+        fout.WriteLine("Numar maxim de carti: " + dp[n, L]);
+        fout.WriteLine();
+
+
+        fout.WriteLine("Cartile selectate (titlu, grosime):");
+        int sumaRamasa = L;
+        int cartiSelectate = 0;
+
+        for (int i = n; i >= 1; i--)
+        {
+
+            if (dp[i, sumaRamasa] != dp[i - 1, sumaRamasa])
+            {
+                fout.WriteLine("Cartea " + i + ": grosime " + grosime[i] + " cm");
+                sumaRamasa -= grosime[i];
+                cartiSelectate++;
+            }
+        }
+
+        fout.WriteLine();
+        fout.WriteLine("Total carti: " + cartiSelectate);
+        fout.WriteLine("Suma grosimilor: " + (L - sumaRamasa) + " cm = " + L + " cm");
+        fout.Close();
+
+        Console.WriteLine("Numar maxim de carti: " + dp[n, L]);
+        Console.WriteLine("Rezultatul e in fisierul raft.out");
+    }
+}
+
+`
+  },
+  {
+    id: 9,
+    title: "POO - 20",
+    date: "12 mar. 2025",
+    time: "~40 min",
+    img: "POO20/Output.png",
+    code:
+`
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+public class ComponentaPC
+{
+    public string CodProdus { get; set; }
+    public double Pret { get; set; }
+    public string Marca { get; set; }
+    public int AnFabricatie { get; set; }
+    public int Garantie { get; set; }
+    public string Producator { get; set; }
+    public string TaraProvenienta { get; set; }
+    public int Stoc { get; set; }
+
+    public ComponentaPC() { }
+
+    public override string ToString()
+    {
+        return "Cod: " + CodProdus + ", Pret: " + Pret + " lei, Marca: " + Marca + 
+               ", An: " + AnFabricatie + ", Garantie: " + Garantie + " luni" +
+               ", Producator: " + Producator + ", Tara: " + TaraProvenienta + ", Stoc: " + Stoc;
+    }
+
+    public string ToFileFormat()
+    {
+        return CodProdus + "|" + Pret + "|" + Marca + "|" + AnFabricatie + "|" + 
+               Garantie + "|" + Producator + "|" + TaraProvenienta + "|" + Stoc;
+    }
+}
+
+public class Procesor : ComponentaPC { }
+public class PlacaDeBaza : ComponentaPC { }
+public class Memorie : ComponentaPC { }
+public class HDD : ComponentaPC { }
+public class SSD : ComponentaPC { }
+public class PlacaVideo : ComponentaPC { }
+public class Sursa : ComponentaPC { }
+public class Carcasa : ComponentaPC { }
+
+public class Magazin<T> where T : ComponentaPC, new()
+{
+    private List<T> produse = new List<T>();
+
+    public void IncarcareDinFisier(string numeFisier)
+    {
+        if (!File.Exists(numeFisier))
+        {
+            Console.WriteLine("Fisierul nu exista!");
+            return;
+        }
+
+        produse.Clear();
+        string[] linii = File.ReadAllLines(numeFisier);
+        
+        foreach (string linie in linii)
+        {
+            if (string.IsNullOrWhiteSpace(linie)) continue;
+            
+            string[] parts = linie.Split('|');
+            if (parts.Length == 8)
+            {
+                T produs = new T();
+                produs.CodProdus = parts[0];
+                produs.Pret = double.Parse(parts[1]);
+                produs.Marca = parts[2];
+                produs.AnFabricatie = int.Parse(parts[3]);
+                produs.Garantie = int.Parse(parts[4]);
+                produs.Producator = parts[5];
+                produs.TaraProvenienta = parts[6];
+                produs.Stoc = int.Parse(parts[7]);
+                
+                produse.Add(produs);
+            }
+        }
+        
+        Console.WriteLine("Au fost incarcate " + produse.Count + " produse.");
+    }
+
+    public void AdaugareProdus(T produs)
+    {
+        foreach (var p in produse)
+        {
+            if (p.CodProdus == produs.CodProdus)
+            {
+                Console.WriteLine("Eroare: Cod produs exista deja!");
+                return;
+            }
+        }
+        
+        produse.Add(produs);
+        Console.WriteLine("Produs adaugat cu succes!");
+    }
+
+    public void VanzareProdus(string codProdus)
+    {
+        T produs = null;
+        foreach (var p in produse)
+        {
+            if (p.CodProdus == codProdus)
+            {
+                produs = p;
+                break;
+            }
+        }
+        
+        if (produs == null)
+        {
+            Console.WriteLine("Produs negasit!");
+            return;
+        }
+        
+        if (produs.Stoc <= 0)
+        {
+            Console.WriteLine("Stoc epuizat!");
+            return;
+        }
+        
+        produs.Stoc--;
+        Console.WriteLine("Vanzare efectuata! Stoc ramas: " + produs.Stoc);
+    }
+
+    public void StergereProdus(string codProdus)
+    {
+        T produs = null;
+        foreach (var p in produse)
+        {
+            if (p.CodProdus == codProdus)
+            {
+                produs = p;
+                break;
+            }
+        }
+        
+        if (produs == null)
+        {
+            Console.WriteLine("Produs negasit!");
+            return;
+        }
+        
+        produse.Remove(produs);
+        Console.WriteLine("Produs sters cu succes!");
+    }
+
+    public void IncarcareStoc(string codProdus, int cantitate)
+    {
+        T produs = null;
+        foreach (var p in produse)
+        {
+            if (p.CodProdus == codProdus)
+            {
+                produs = p;
+                break;
+            }
+        }
+        
+        if (produs == null)
+        {
+            Console.WriteLine("Produs negasit!");
+            return;
+        }
+        
+        produs.Stoc += cantitate;
+        Console.WriteLine("Stoc actualizat! Stoc curent: " + produs.Stoc);
+    }
+
+    public double CalculeazaTotalStoc()
+    {
+        double total = 0;
+        foreach (var p in produse)
+        {
+            total += p.Stoc * p.Pret;
+        }
+        return total;
+    }
+
+    public void AfisarePretDupaMarca(string marca)
+    {
+        List<T> gasite = new List<T>();
+        foreach (var p in produse)
+        {
+            if (p.Marca.ToLower() == marca.ToLower())
+                gasite.Add(p);
+        }
+        
+        if (gasite.Count == 0)
+        {
+            Console.WriteLine("Niciun produs gasit cu aceasta marca!");
+            return;
+        }
+        
+        Console.WriteLine("Produse marca '" + marca + "':");
+        foreach (var p in gasite)
+        {
+            Console.WriteLine("  " + p.CodProdus + " - Pret: " + p.Pret + " lei, Stoc: " + p.Stoc);
+        }
+    }
+
+    public void SalvareInFisier(string numeFisier)
+    {
+        using (StreamWriter sw = new StreamWriter(numeFisier))
+        {
+            foreach (var p in produse)
+            {
+                sw.WriteLine(p.ToFileFormat());
+            }
+        }
+        Console.WriteLine("Au fost salvate " + produse.Count + " produse in fisier.");
+    }
+
+    public void AfisareToate()
+    {
+        if (produse.Count == 0)
+        {
+            Console.WriteLine("Magazinul este gol!");
+            return;
+        }
+        
+        Console.WriteLine("Produse in magazin:");
+        foreach (var p in produse)
+        {
+            Console.WriteLine(p);
+        }
+    }
+}
+
+class Program
+{
+    static Magazin<ComponentaPC> magazin = new Magazin<ComponentaPC>();
+
+    static void Main(string[] args)
+    {
+        bool ruleaza = true;
+        
+        while (ruleaza)
+        {
+            Console.WriteLine();
+            Console.WriteLine("=== MAGAZIN COMPONENTE PC ===");
+            Console.WriteLine("1. Incarcare din fisier");
+            Console.WriteLine("2. Adaugare produs nou");
+            Console.WriteLine("3. Vanzare produs");
+            Console.WriteLine("4. Stergere produs");
+            Console.WriteLine("5. Incarcare stoc");
+            Console.WriteLine("6. Total valoare stoc");
+            Console.WriteLine("7. Afisare pret dupa marca");
+            Console.WriteLine("8. Salvare in fisier");
+            Console.WriteLine("9. Afisare toate produsele");
+            Console.WriteLine("0. Iesire");
+            Console.Write("Alegeti optiunea: ");
+            
+            string optiune = Console.ReadLine();
+            Console.WriteLine();
+            
+            switch (optiune)
+            {
+                case "1":
+                    Console.Write("Nume fisier: ");
+                    magazin.IncarcareDinFisier(Console.ReadLine());
+                    break;
+                    
+                case "2":
+                    AdaugareProdus();
+                    break;
+                    
+                case "3":
+                    Console.Write("Cod produs de vandut: ");
+                    magazin.VanzareProdus(Console.ReadLine());
+                    break;
+                    
+                case "4":
+                    Console.Write("Cod produs de sters: ");
+                    magazin.StergereProdus(Console.ReadLine());
+                    break;
+                    
+                case "5":
+                    Console.Write("Cod produs: ");
+                    string cod = Console.ReadLine();
+                    Console.Write("Cantitate de adaugat: ");
+                    magazin.IncarcareStoc(cod, int.Parse(Console.ReadLine()));
+                    break;
+                    
+                case "6":
+                    Console.WriteLine("Total valoare stoc: " + magazin.CalculeazaTotalStoc() + " lei");
+                    break;
+                    
+                case "7":
+                    Console.Write("Marca de cautat: ");
+                    magazin.AfisarePretDupaMarca(Console.ReadLine());
+                    break;
+                    
+                case "8":
+                    Console.Write("Nume fisier: ");
+                    magazin.SalvareInFisier(Console.ReadLine());
+                    break;
+                    
+                case "9":
+                    magazin.AfisareToate();
+                    break;
+                    
+                case "0":
+                    ruleaza = false;
+                    Console.WriteLine("La revedere!");
+                    break;
+                    
+                default:
+                    Console.WriteLine("Optiune invalida!");
+                    break;
+            }
+        }
+    }
+
+    static void AdaugareProdus()
+    {
+        ComponentaPC produs = new ComponentaPC();
+        
+        Console.Write("Cod produs: ");
+        produs.CodProdus = Console.ReadLine();
+        
+        Console.Write("Pret (lei): ");
+        produs.Pret = double.Parse(Console.ReadLine());
+        
+        Console.Write("Marca: ");
+        produs.Marca = Console.ReadLine();
+        
+        Console.Write("An fabricatie: ");
+        produs.AnFabricatie = int.Parse(Console.ReadLine());
+        
+        Console.Write("Garantie (luni): ");
+        produs.Garantie = int.Parse(Console.ReadLine());
+        
+        Console.Write("Producator: ");
+        produs.Producator = Console.ReadLine();
+        
+        Console.Write("Tara provenienta: ");
+        produs.TaraProvenienta = Console.ReadLine();
+        
+        Console.Write("Stoc initial: ");
+        produs.Stoc = int.Parse(Console.ReadLine());
+        
+        magazin.AdaugareProdus(produs);
+    }
+}
+`
+  },
+  {
+    id: 10,
+    title: "POO - 9",
+    date: "19 mar. 2025",
+    time: "~55 min",
+    img: "",
+    code:
+`
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace GestiuneTV
+{
+
+
+
+
+    enum GenEmisiune
+    {
+        Divertisment,
+        Cultural,
+        Stiri,
+        Sport,
+        Documentar,
+        Film,
+        Educativ
+    }
+
+    enum PublicTinta
+    {
+        Copii,
+        Tineri,
+        Adulti,
+        Varstnici,
+        General
+    }
+
+    enum TipEmisiune
+    {
+        Live,
+        Inregistrata
+    }
+
+
+
+
+
+    class Emisiune
+    {
+
+        public string Titlu { get; set; }
+        public GenEmisiune Gen { get; set; }
+        public PublicTinta Public { get; set; }
+        public TimeSpan OraDifuzare { get; set; }
+        public int DurataMinute { get; set; }
+        public TipEmisiune Tip { get; set; }
+
+
+        public Emisiune(string titlu, GenEmisiune gen, PublicTinta publicTinta,
+                        TimeSpan ora, int durata, TipEmisiune tip)
+        {
+            Titlu = titlu;
+            Gen = gen;
+            Public = publicTinta;
+            OraDifuzare = ora;
+            DurataMinute = durata;
+            Tip = tip;
+        }
+
+
+        public void Afiseaza()
+        {
+            Console.WriteLine($"   [{OraDifuzare:hh\\:mm}] {Titlu,-25} | " +
+                              $"Gen: {Gen,-13} | Public: {Public,-9} | " +
+                              $"Durata: {DurataMinute,3} min | Tip: {Tip}");
+        }
+    }
+
+
+
+
+
+    class ZiProgram
+    {
+        public DayOfWeek Zi { get; set; }
+        public List<Emisiune> Emisiuni { get; set; }
+
+        public ZiProgram(DayOfWeek zi)
+        {
+            Zi = zi;
+            Emisiuni = new List<Emisiune>();
+        }
+
+        public void AdaugaEmisiune(Emisiune e)
+        {
+            Emisiuni.Add(e);
+        }
+    }
+
+
+
+
+
+    class Canal
+    {
+
+        public string Nume { get; set; }
+        public double Frecventa { get; set; }
+        public List<DayOfWeek> ZileRevizii { get; set; }
+        public List<ZiProgram> Program { get; set; }
+
+
+        public Canal(string nume, double frecventa)
+        {
+            Nume = nume;
+            Frecventa = frecventa;
+            ZileRevizii = new List<DayOfWeek>();
+            Program = new List<ZiProgram>();
+        }
+
+
+
+        public void AdaugaZiRevizii(DayOfWeek zi)
+        {
+            ZileRevizii.Add(zi);
+        }
+
+        public void AdaugaZiProgram(ZiProgram zi)
+        {
+            Program.Add(zi);
+        }
+
+
+        private List<Emisiune> ToateEmisiunile()
+        {
+            var lista = new List<Emisiune>();
+            foreach (var zi in Program)
+                lista.AddRange(zi.Emisiuni);
+            return lista;
+        }
+
+
+
+
+        public GenEmisiune DeterminaTipCanal()
+        {
+            var toate = ToateEmisiunile();
+            if (toate.Count == 0) return GenEmisiune.Divertisment; 
+
+
+            var contor = new Dictionary<GenEmisiune, int>();
+            foreach (var e in toate)
+            {
+                if (!contor.ContainsKey(e.Gen))
+                    contor[e.Gen] = 0;
+                contor[e.Gen]++;
+            }
+
+
+            GenEmisiune tipMajoritar = toate[0].Gen;
+            int maxim = 0;
+            foreach (var pereche in contor)
+            {
+                if (pereche.Value > maxim)
+                {
+                    maxim = pereche.Value;
+                    tipMajoritar = pereche.Key;
+                }
+            }
+            return tipMajoritar;
+        }
+
+
+
+
+        public double DurataMedie()
+        {
+            var toate = ToateEmisiunile();
+            if (toate.Count == 0) return 0;
+
+            int totalMinute = 0;
+            foreach (var e in toate)
+                totalMinute += e.DurataMinute;
+
+            return (double)totalMinute / toate.Count;
+        }
+
+
+
+
+        public void StatisticaTipEmisiuni(out int nrLive, out int nrInregistrate)
+        {
+            nrLive = 0;
+            nrInregistrate = 0;
+            foreach (var e in ToateEmisiunile())
+            {
+                if (e.Tip == TipEmisiune.Live)
+                    nrLive++;
+                else
+                    nrInregistrate++;
+            }
+        }
+
+
+
+
+        public PublicTinta DeterminaPublicTinta()
+        {
+            var toate = ToateEmisiunile();
+            if (toate.Count == 0) return PublicTinta.General;
+
+            var contor = new Dictionary<PublicTinta, int>();
+            foreach (var e in toate)
+            {
+                if (!contor.ContainsKey(e.Public))
+                    contor[e.Public] = 0;
+                contor[e.Public]++;
+            }
+
+            PublicTinta publicMajoritar = toate[0].Public;
+            int maxim = 0;
+            foreach (var pereche in contor)
+            {
+                if (pereche.Value > maxim)
+                {
+                    maxim = pereche.Value;
+                    publicMajoritar = pereche.Key;
+                }
+            }
+            return publicMajoritar;
+        }
+
+
+
+
+
+        public string OraPreponderenta(GenEmisiune gen)
+        {
+
+            int dimineata = 0, amiaza = 0, seara = 0, noapte = 0;
+
+            foreach (var zi in Program)
+            {
+                foreach (var e in zi.Emisiuni)
+                {
+                    if (e.Gen != gen) continue;
+
+                    int ora = e.OraDifuzare.Hours;
+                    if (ora >= 6 && ora < 12)       dimineata++;
+                    else if (ora >= 12 && ora < 18)  amiaza++;
+                    else if (ora >= 18 && ora < 24)  seara++;
+                    else                              noapte++;
+                }
+            }
+
+            int max = Math.Max(Math.Max(dimineata, amiaza), Math.Max(seara, noapte));
+
+            if (max == 0) return "Nicio emisiune de acest gen";
+            if (max == seara)     return $"Seara (18:00-24:00)  [{seara} emisiuni]";
+            if (max == amiaza)    return $"Amiaza (12:00-18:00) [{amiaza} emisiuni]";
+            if (max == dimineata) return $"Dimineata (6:00-12:00) [{dimineata} emisiuni]";
+            return $"Noapte (0:00-6:00) [{noapte} emisiuni]";
+        }
+
+
+
+
+        public void AfiseazaRaport()
+        {
+            Console.WriteLine();
+            Console.WriteLine(new string('═', 65));
+            Console.WriteLine($"  CANAL: {Nume}   |  Frecventa: {Frecventa} MHz");
+            Console.WriteLine(new string('═', 65));
+
+
+            if (ZileRevizii.Count > 0)
+            {
+                Console.Write("  Zile revizii: ");
+                foreach (var z in ZileRevizii)
+                    Console.Write(z + " ");
+                Console.WriteLine();
+            }
+
+
+            foreach (var zi in Program)
+            {
+                Console.WriteLine($"\n  --- {zi.Zi} ---");
+                foreach (var e in zi.Emisiuni)
+                    e.Afiseaza();
+            }
+
+
+            Console.WriteLine();
+            Console.WriteLine($"  1. Tip canal          : {DeterminaTipCanal()}");
+            Console.WriteLine($"  2. Durata medie       : {DurataMedie():F1} minute");
+
+            int live, inreg;
+            StatisticaTipEmisiuni(out live, out inreg);
+            Console.WriteLine($"  3. Emisiuni live      : {live}");
+            Console.WriteLine($"     Emisiuni inreg.    : {inreg}");
+            Console.WriteLine($"  4. Public tinta       : {DeterminaPublicTinta()}");
+
+
+            Console.WriteLine("  5. Ora preponderenta per gen:");
+            var genuriFolosite = new HashSet<GenEmisiune>();
+            foreach (var zi in Program)
+                foreach (var e in zi.Emisiuni)
+                    genuriFolosite.Add(e.Gen);
+
+            foreach (var gen in genuriFolosite)
+                Console.WriteLine($"     {gen,-13}: {OraPreponderenta(gen)}");
+        }
+    }
+
+
+
+
+
+    class FirmaTV
+    {
+        public string NumeFirma { get; set; }
+        public List<Canal> Canale { get; set; }
+
+        public FirmaTV(string nume)
+        {
+            NumeFirma = nume;
+            Canale = new List<Canal>();
+        }
+
+        public void AdaugaCanal(Canal c)
+        {
+            Canale.Add(c);
+        }
+
+
+
+
+        public void AfiseazaSituatieGlobala()
+        {
+            Console.WriteLine();
+            Console.WriteLine(new string('*', 65));
+            Console.WriteLine($"  SITUATIE GLOBALA – {NumeFirma}  ({Canale.Count} canale)");
+            Console.WriteLine(new string('*', 65));
+
+
+            Console.WriteLine("\n  TIPUL CANALELOR:");
+            var conторCanale = new Dictionary<GenEmisiune, int>();
+            foreach (var canal in Canale)
+            {
+                var tip = canal.DeterminaTipCanal();
+                Console.WriteLine($"    {canal.Nume,-20} -> {tip}");
+
+                if (!conторCanale.ContainsKey(tip))
+                    conторCanale[tip] = 0;
+                conторCanale[tip]++;
+            }
+
+            Console.WriteLine("\n  DISTRIBUTIA TIPURILOR:");
+            foreach (var pereche in conторCanale)
+                Console.WriteLine($"    {pereche.Key,-15}: {pereche.Value} canal(e)");
+
+
+            Console.WriteLine("\n  ACOPERIREA PUBLICULUI TINTA:");
+            var conторPublic = new Dictionary<PublicTinta, List<string>>();
+            foreach (var canal in Canale)
+            {
+                var pub = canal.DeterminaPublicTinta();
+                if (!conторPublic.ContainsKey(pub))
+                    conторPublic[pub] = new List<string>();
+                conторPublic[pub].Add(canal.Nume);
+            }
+
+            foreach (var pereche in conторPublic)
+            {
+                Console.Write($"    {pereche.Key,-10}: ");
+                Console.WriteLine(string.Join(", ", pereche.Value));
+            }
+
+
+            var toateSegmentele = new PublicTinta[]
+            {
+                PublicTinta.Copii, PublicTinta.Tineri,
+                PublicTinta.Adulti, PublicTinta.Varstnici
+            };
+            Console.WriteLine("\n  SEGMENTE NEACOPERITE:");
+            bool totulAcoperit = true;
+            foreach (var seg in toateSegmentele)
+            {
+                if (!conторPublic.ContainsKey(seg))
+                {
+                    Console.WriteLine($"    ATENTIE: Niciun canal nu tinteste publicul '{seg}'!");
+                    totulAcoperit = false;
+                }
+            }
+            if (totulAcoperit)
+                Console.WriteLine("    Toate segmentele de public sunt acoperite.");
+
+            Console.WriteLine(new string('*', 65));
+        }
+    }
+
+
+
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.WriteLine("=== GESTIUNEA GRILEI DE PROGRAME TV ===\n");
+
+
+            FirmaTV firma = new FirmaTV("CableVision SRL");
+
+
+
+
+            Canal canal1 = new Canal("ProKid", 482.5);
+            canal1.AdaugaZiRevizii(DayOfWeek.Monday);
+
+
+            ZiProgram luni1 = new ZiProgram(DayOfWeek.Monday);
+            luni1.AdaugaEmisiune(new Emisiune("Desene animate",   GenEmisiune.Divertisment, PublicTinta.Copii,    new TimeSpan(8,0,0),  30, TipEmisiune.Inregistrata));
+            luni1.AdaugaEmisiune(new Emisiune("Scoala veseliei",  GenEmisiune.Educativ,     PublicTinta.Copii,    new TimeSpan(9,0,0),  45, TipEmisiune.Inregistrata));
+            luni1.AdaugaEmisiune(new Emisiune("Mic Chef",         GenEmisiune.Divertisment, PublicTinta.Copii,    new TimeSpan(10,0,0), 60, TipEmisiune.Live));
+            canal1.AdaugaZiProgram(luni1);
+
+
+            ZiProgram marti1 = new ZiProgram(DayOfWeek.Tuesday);
+            marti1.AdaugaEmisiune(new Emisiune("Povesti animate", GenEmisiune.Cultural,     PublicTinta.Copii,    new TimeSpan(8,30,0), 30, TipEmisiune.Inregistrata));
+            marti1.AdaugaEmisiune(new Emisiune("Jocuri si voie buna", GenEmisiune.Divertisment, PublicTinta.Copii, new TimeSpan(14,0,0),90, TipEmisiune.Live));
+            canal1.AdaugaZiProgram(marti1);
+
+            firma.AdaugaCanal(canal1);
+
+
+
+
+            Canal canal2 = new Canal("CulturaPro", 514.0);
+            canal2.AdaugaZiRevizii(DayOfWeek.Wednesday);
+
+            ZiProgram luni2 = new ZiProgram(DayOfWeek.Monday);
+            luni2.AdaugaEmisiune(new Emisiune("Stiri culturale",  GenEmisiune.Stiri,        PublicTinta.Adulti,   new TimeSpan(7,0,0),  30, TipEmisiune.Live));
+            luni2.AdaugaEmisiune(new Emisiune("Documentar istorie", GenEmisiune.Documentar, PublicTinta.Adulti,   new TimeSpan(10,0,0), 90, TipEmisiune.Inregistrata));
+            luni2.AdaugaEmisiune(new Emisiune("Concert simfonic", GenEmisiune.Cultural,     PublicTinta.General,  new TimeSpan(20,0,0), 120,TipEmisiune.Live));
+            canal2.AdaugaZiProgram(luni2);
+
+            ZiProgram marti2 = new ZiProgram(DayOfWeek.Tuesday);
+            marti2.AdaugaEmisiune(new Emisiune("Teatru national",  GenEmisiune.Cultural,    PublicTinta.Adulti,   new TimeSpan(19,0,0), 100,TipEmisiune.Live));
+            marti2.AdaugaEmisiune(new Emisiune("Arta moderna",     GenEmisiune.Cultural,    PublicTinta.Adulti,   new TimeSpan(21,30,0), 60,TipEmisiune.Inregistrata));
+            canal2.AdaugaZiProgram(marti2);
+
+            ZiProgram joi2 = new ZiProgram(DayOfWeek.Thursday);
+            joi2.AdaugaEmisiune(new Emisiune("Stiinta si tehnica", GenEmisiune.Educativ,    PublicTinta.Tineri,   new TimeSpan(16,0,0), 45, TipEmisiune.Inregistrata));
+            joi2.AdaugaEmisiune(new Emisiune("Dezbatere culturala",GenEmisiune.Cultural,    PublicTinta.Adulti,   new TimeSpan(22,0,0), 60, TipEmisiune.Live));
+            canal2.AdaugaZiProgram(joi2);
+
+            firma.AdaugaCanal(canal2);
+
+
+
+
+            Canal canal3 = new Canal("SportMax", 530.25);
+
+            ZiProgram luni3 = new ZiProgram(DayOfWeek.Monday);
+            luni3.AdaugaEmisiune(new Emisiune("Fotbal Liga 1",    GenEmisiune.Sport,        PublicTinta.Adulti,   new TimeSpan(20,0,0), 105,TipEmisiune.Live));
+            luni3.AdaugaEmisiune(new Emisiune("Rezumat meci",     GenEmisiune.Sport,        PublicTinta.Adulti,   new TimeSpan(22,30,0), 30,TipEmisiune.Inregistrata));
+            canal3.AdaugaZiProgram(luni3);
+
+            ZiProgram sambata3 = new ZiProgram(DayOfWeek.Saturday);
+            sambata3.AdaugaEmisiune(new Emisiune("Tenis Roland Garros", GenEmisiune.Sport,  PublicTinta.General,  new TimeSpan(14,0,0), 180,TipEmisiune.Live));
+            sambata3.AdaugaEmisiune(new Emisiune("Baschet NBA",    GenEmisiune.Sport,       PublicTinta.Tineri,   new TimeSpan(19,0,0), 130,TipEmisiune.Live));
+            sambata3.AdaugaEmisiune(new Emisiune("Stiri sport",    GenEmisiune.Stiri,       PublicTinta.Adulti,   new TimeSpan(21,30,0), 20,TipEmisiune.Live));
+            canal3.AdaugaZiProgram(sambata3);
+
+            ZiProgram duminica3 = new ZiProgram(DayOfWeek.Sunday);
+            duminica3.AdaugaEmisiune(new Emisiune("Formula 1 Race",GenEmisiune.Sport,       PublicTinta.General,  new TimeSpan(15,0,0), 120,TipEmisiune.Live));
+            canal3.AdaugaZiProgram(duminica3);
+
+            firma.AdaugaCanal(canal3);
+
+
+
+
+            Canal canal4 = new Canal("SeniorTV", 546.0);
+            canal4.AdaugaZiRevizii(DayOfWeek.Friday);
+            canal4.AdaugaZiRevizii(DayOfWeek.Saturday);
+
+            ZiProgram luni4 = new ZiProgram(DayOfWeek.Monday);
+            luni4.AdaugaEmisiune(new Emisiune("Sanatate la zi",   GenEmisiune.Educativ,     PublicTinta.Varstnici, new TimeSpan(9,0,0),  45, TipEmisiune.Live));
+            luni4.AdaugaEmisiune(new Emisiune("Muzica populara",  GenEmisiune.Divertisment, PublicTinta.Varstnici, new TimeSpan(11,0,0), 60, TipEmisiune.Inregistrata));
+            luni4.AdaugaEmisiune(new Emisiune("Telefilm romanesc",GenEmisiune.Film,         PublicTinta.Varstnici, new TimeSpan(20,0,0), 90, TipEmisiune.Inregistrata));
+            canal4.AdaugaZiProgram(luni4);
+
+            ZiProgram miercuri4 = new ZiProgram(DayOfWeek.Wednesday);
+            miercuri4.AdaugaEmisiune(new Emisiune("Retete traditionale",GenEmisiune.Educativ,PublicTinta.Varstnici,new TimeSpan(10,0,0), 30, TipEmisiune.Live));
+            miercuri4.AdaugaEmisiune(new Emisiune("Serial romanesc",GenEmisiune.Divertisment,PublicTinta.Varstnici,new TimeSpan(18,0,0), 50, TipEmisiune.Inregistrata));
+            canal4.AdaugaZiProgram(miercuri4);
+
+            firma.AdaugaCanal(canal4);
+
+
+
+
+            foreach (var canal in firma.Canale)
+                canal.AfiseazaRaport();
+
+
+
+
+            firma.AfiseazaSituatieGlobala();
+
+            Console.WriteLine("\nApasati orice tasta pentru a iesi...");
+            Console.ReadKey();
+        }
+    }
+}
+
+`
+  },
+  {
+    id: 11,
+    title: "Tehnica Greedy - M2.1 (Problema la alegere)",
+    date: "26 mar. 2025",
+    time: "~1h",
+    imgs: ["m2.1/input.png", "m2.1/output.png"],
+    code:
+`
+using System;
+using System.IO;
+using System.Linq;
+
+class Spectacol
+{
+    public int Numar { get; set; }
+    public int Inceput { get; set; }
+    public int Sfarsit { get; set; }
+
+    public Spectacol(int numar, int inceput, int sfarsit)
+    {
+        Numar = numar;
+        Inceput = inceput;
+        Sfarsit = sfarsit;
+    }
+
+    public override string ToString()
+    {
+        return "Spectacolul " + Numar + ": [" + Inceput + ", " + Sfarsit + "]";
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        StreamReader fin = new StreamReader("input.txt");
+        
+        int n = int.Parse(fin.ReadLine());
+        
+        Spectacol[] spectacole = new Spectacol[n];
+        
+        for (int i = 0; i < n; i++)
+        {
+            string[] parts = fin.ReadLine().Split(' ');
+            int inceput = int.Parse(parts[0]);
+            int sfarsit = int.Parse(parts[1]);
+            spectacole[i] = new Spectacol(i + 1, inceput, sfarsit);
+        }
+        fin.Close();
+
+        Array.Sort(spectacole, (a, b) => a.Sfarsit.CompareTo(b.Sfarsit));
+
+        List<Spectacol> selectate = new List<Spectacol>();
+        int ultimSfarsit = -1;
+
+        foreach (var s in spectacole)
+        {
+            if (s.Inceput >= ultimSfarsit)
+            {
+                selectate.Add(s);
+                ultimSfarsit = s.Sfarsit;
+            }
+        }
+
+        var selectateOrdonate = selectate.OrderBy(s => s.Inceput).ToList();
+
+        StreamWriter fout = new StreamWriter("output.txt");
+        fout.WriteLine(selectate.Count);
+        foreach (var s in selectateOrdonate)
+            fout.WriteLine(s.Numar + " " + s.Inceput + " " + s.Sfarsit);
+        fout.Close();
+
+        Console.WriteLine("Numar maxim de spectacole: " + selectate.Count);
+    }
+}
+`
+  }
+];
+// ══════════════════════════════════════════════════════════════════
+
+// Simple syntax highlight for display
+function highlight(code) {
+  const kw = ['class','interface','void','int','string','double','bool','var',
+               'new','return','foreach','for','if','else','try','catch','in',
+               'public','private','override','virtual','abstract','static',
+               'delegate','using','namespace','base','this','null','true','false'];
+  const lines = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return lines
+    .replace(/\/\/[^\n]*/g, m => `<span class="cm">${m}</span>`)
+    .replace(/"([^"]*)"/g, '<span class="str">"$1"</span>')
+    .replace(/\b(\d+\.?\d*)\b/g, '<span class="num">$1</span>')
+    .replace(new RegExp(`\\b(${kw.join('|')})\\b`, 'g'), '<span class="kw">$1</span>');
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  PROBLEMS.forEach(p => {
+    const imageList = Array.isArray(p.imgs) && p.imgs.length
+      ? p.imgs.filter(Boolean)
+      : p.img ? [p.img] : [];
+    const hasImg = imageList.length > 0;
+    const mainImg = hasImg ? imageList[0] : '';
+    const galleryHtml = imageList.length > 1
+      ? imageList.map((src, idx) => `
+          <button type="button" class="gallery-thumb" onclick="openLB('${src}')">
+            <img src="${src}" alt="Foto ${idx + 1} #${p.id}"
+                 onerror="this.parentElement.outerHTML='<div class=\\'prob-thumb-placeholder\\'>Negăsită</div>'" />
+          </button>`).join('')
+      : '';
+    const card = document.createElement('div');
+    card.className = 'prob-card';
+    card.innerHTML = `
+      <div class="prob-img">
+        ${hasImg
+          ? `<img src="${mainImg}" alt="Output #${p.id}"
+               onclick="openLB('${mainImg}')"
+               onerror="this.parentElement.innerHTML='<div class=\\'prob-img-placeholder\\'><svg width=\\'28\\' height=\\'28\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\' viewBox=\\'0 0 24 24\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/><circle cx=\\'8.5\\' cy=\\'8.5\\' r=\\'1.5\\'/><polyline points=\\'21 15 16 10 5 21\\'/></svg>Imagine negăsită</div>'" />`
+          : `<div class="prob-img-placeholder">
+               <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+               Output în curând
+             </div>`
+        }
+      </div>
+      ${galleryHtml ? `<div class="prob-gallery">${galleryHtml}</div>` : ''}
+      <div class="prob-body">
+        <div class="prob-meta">
+          <span class="prob-num">#${String(p.id).padStart(2,'0')}</span>
+          <span class="prob-date">${p.date}</span>
+        </div>
+        <div class="prob-title">${p.title}</div>
+        <div class="prob-time">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          ${p.time}
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm code-expand-btn" onclick="openCode(${p.id})">Arată codul complet</button>
+        <div class="prob-code">${highlight(p.code)}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function openLB(src) {
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function openCode(id) {
+  const problem = PROBLEMS.find(p => p.id === id);
+  if (!problem) return;
+  document.getElementById('codeModalTitle').textContent = `${problem.title} — Cod complet`;
+  document.getElementById('codeModalBody').innerHTML = `<pre>${highlight(problem.code)}</pre>`;
+  document.getElementById('codeModal').classList.add('open');
+}
+
+function closeCode() {
+  document.getElementById('codeModal').classList.remove('open');
+}
+
+document.getElementById('lightbox').addEventListener('click', () =>
+  document.getElementById('lightbox').classList.remove('open'));
+document.getElementById('closeCodeBtn').addEventListener('click', closeCode);
+document.getElementById('codeModal').addEventListener('click', event => {
+  if (event.target.id === 'codeModal') closeCode();
+});
+
+render();
+</script>
+</body>
+</html>

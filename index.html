@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nagomir Emilian — Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="nav-brand">// <span>nagomir-emilian.cv</span></span>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="active">Acasă</a></li>
+    <li><a href="cv.html">Curriculum Vitae</a></li>
+    <li><a href="probleme.html">Probleme Practică</a></li>
+    <li><a href="polimorfism.html">Polimorfism</a></li>
+    <li><a href="asumare.html">Asumare responsabilitate</a></li>
+  </ul>
+  <button class="burger" id="burger"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <h1>Salut, sunt<br><em>Nagomir Emilian</em></h1>
+    <p>Student în informatică, în desfășurarea practicii de instruire. Aici găsești CV-ul meu, problemele rezolvate în C# și tema despre polimorfism dinamic.</p>
+    <div class="hero-btns">
+      <a href="cv.html" class="btn btn-primary">CV-ul meu</a>
+      <a href="probleme.html" class="btn btn-ghost">Probleme rezolvate</a>
+    </div>
+  </div>
+
+  <div class="avatar-wrap">
+    <img
+      src="IMG_1753.jpg"
+      alt="Nagomir Emilian"
+      onerror="this.style.display='none'; document.getElementById('av-fallback').style.display='flex';"
+    />
+    <div class="avatar-fallback" id="av-fallback" style="display:none;">
+      <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      poza.jpg
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="container" style="padding-top:0;">
+  <div class="stats" style="margin-bottom:2rem;">
+    <div class="stat"><div class="stat-val">11</div><div class="stat-lbl">Probleme rezolvate</div></div>
+    <div class="stat"><div class="stat-val">C#</div><div class="stat-lbl">Limbaj principal</div></div>
+    <div class="stat"><div class="stat-val">2026</div><div class="stat-lbl">An de practică</div></div>
+    <div class="stat"><div class="stat-val">OOP</div><div class="stat-lbl">Focus tehnic</div></div>
+  </div>
+
+  <div class="sec-title">Navigare rapidă</div>
+  <div class="nav-cards">
+    <a href="cv.html" class="nav-card">
+      <div class="nav-card-icon">📄</div>
+      <h3>Curriculum Vitae</h3>
+      <p>Date personale, educație, experiență, competențe și limbi vorbite.</p>
+    </a>
+    <a href="probleme.html" class="nav-card">
+      <div class="nav-card-icon">💻</div>
+      <h3>Probleme Practică</h3>
+      <p>11 probleme rezolvate în C# cu cod sursă, output și timpul de rezolvare.</p>
+    </a>
+    <a href="polimorfism.html" class="nav-card">
+      <div class="nav-card-icon">📚</div>
+      <h3>Polimorfism dinamic</h3>
+      <p>Teorie și exemple practice despre polimorfismul dinamic în C#.</p>
+    </a>
+    <a href="asumare.html" class="nav-card">
+      <div class="nav-card-icon">✍️</div>
+      <h3>Asumare responsabilitate</h3>
+      <p>Declarație privind autenticitatea materialelor din raportul de practică.</p>
+    </a>
+  </div>
+</div>
+
+<footer><p>Nagomir Emilian · Practică de instruire · <span id="yr"></span></p></footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  document.getElementById('burger').addEventListener('click', () =>
+    document.getElementById('navLinks').classList.toggle('open'));
+</script>
+</body>
+</html>

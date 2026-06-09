@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polimorfism dinamic C# — Nagomir Emilian</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    .article { max-width: 740px; margin: 0 auto; padding: 2.5rem 2rem; }
+    .article h2 { font-size: 1.35rem; margin: 2.5rem 0 0.75rem; }
+    .article h3 { font-size: 1.05rem; margin: 1.75rem 0 0.5rem; color: var(--accent2); }
+    .article p  { color: var(--muted); line-height: 1.8; margin-bottom: 0.9rem; }
+    .article ul, .article ol { color: var(--muted); margin: 0.5rem 0 1rem 1.5rem; line-height: 1.8; }
+
+    .note {
+      background: rgba(124,158,245,0.07); border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0; padding: 0.9rem 1.1rem; margin: 1.25rem 0;
+      color: var(--text);
+    }
+    .note.green { background: rgba(74,222,128,0.07); border-color: var(--green); }
+    .note strong { display: block; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+
+    .code-block { background: #0d0d14; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1.25rem 0; }
+    .code-header { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); background: var(--bg2); }
+    .code-lang { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.07em; }
+    .copy-btn { background: none; border: none; color: var(--dim); font-size: 0.75rem; cursor: pointer; font-family: var(--font); padding: 0.2rem 0.5rem; border-radius: 4px; transition: all 0.15s; }
+    .copy-btn:hover { background: var(--bg3); color: var(--text); }
+    .code-block pre { padding: 1.1rem 1.25rem; overflow-x: auto; font-size: 0.8rem; line-height: 1.7; color: #cdd6f4; }
+
+    .toc { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+    .toc-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); margin-bottom: 0.75rem; }
+    .toc ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.3rem; }
+    .toc li { display: flex; align-items: baseline; gap: 0.5rem; }
+    .toc-n { font-family: var(--mono); font-size: 0.68rem; color: var(--dim); min-width: 18px; }
+    .toc a { font-size: 0.85rem; color: var(--muted); }
+    .toc a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="nav-brand">// <span>nagomir-emilian.cv</span></span>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Acasă</a></li>
+    <li><a href="cv.html">Curriculum Vitae</a></li>
+    <li><a href="probleme.html">Probleme Practică</a></li>
+    <li><a href="polimorfism.html" class="active">Polimorfism</a></li>
+    <li><a href="asumare.html">Asumare responsabilitate</a></li>
+  </ul>
+  <button class="burger" id="burger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-header">
+  <div class="badge">Teorie · C# · OOP</div>
+  <h1>Polimorfism dinamic în C#</h1>
+  <p>Unul dintre cele mai utile concepte din OOP — explicat pas cu pas, cu exemple reale.</p>
+</div>
+
+<article class="article">
+
+  <div class="toc">
+    <div class="toc-title">Cuprins</div>
+    <ol>
+      <li><span class="toc-n">01</span><a href="#ce-este">Ce este polimorfismul?</a></li>
+      <li><span class="toc-n">02</span><a href="#static-dinamic">Static vs. Dinamic</a></li>
+      <li><span class="toc-n">03</span><a href="#virtual-override">virtual și override</a></li>
+      <li><span class="toc-n">04</span><a href="#exemplu">Exemplu complet</a></li>
+      <li><span class="toc-n">05</span><a href="#abstract">Clase abstracte</a></li>
+      <li><span class="toc-n">06</span><a href="#interfete">Interfețe</a></li>
+      <li><span class="toc-n">07</span><a href="#base">Cuvântul cheie base</a></li>
+      <li><span class="toc-n">08</span><a href="#greseli">Greșeli frecvente</a></li>
+      <li><span class="toc-n">09</span><a href="#cand">Când să îl folosești</a></li>
+    </ol>
+  </div>
+
+  <h2 id="ce-este">1. Ce este polimorfismul?</h2>
+  <p>Dacă ești la început cu OOP, sigur ai întâlnit cuvântul <strong>polimorfism</strong> și poate ți s-a părut complicat. De fapt, ideea e destul de simplă odată ce o înțelegi cu un exemplu concret.</p>
+  <p><em>Polimorfism</em> vine din greacă și înseamnă <strong>„mai multe forme"</strong>. În programare, asta înseamnă că un același apel de metodă poate produce comportamente diferite, în funcție de obiectul concret pe care îl ai. Gândește-te la comanda „fa un sunet" — un câine latră, o pisică miaună, o pasăre ciripește. Aceeași comandă, rezultate diferite.</p>
+
+  <div class="note">
+    <strong>💡 Ideea centrală</strong>
+    Polimorfismul îți permite să scrii cod care lucrează cu mai multe tipuri de obiecte fără să știi exact care e tipul fiecăruia. Tu apelezi metoda, iar obiectul știe singur ce să facă.
+  </div>
+
+  <h2 id="static-dinamic">2. Polimorfism static vs. dinamic</h2>
+  <p>În C# există două forme. E important să le știi pe amândouă.</p>
+
+  <h3>Polimorfism static — la compilare</h3>
+  <p>Se rezolvă în momentul compilării. Exemplul clasic este <strong>supraîncărcarea metodelor</strong> (method overloading) — mai multe metode cu același nume dar parametri diferiți, iar compilatorul alege care se apelează.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">C# — Static (overloading)</span><button class="copy-btn" onclick="copyCode(this)">Copiază</button></div>
+    <pre><span class="kw">class</span> <span class="tp">Calculator</span>
+{
+    <span class="kw">public int</span>    <span class="fn">Aduna</span>(<span class="kw">int</span> a, <span class="kw">int</span> b)       => a + b;
+    <span class="kw">public double</span> <span class="fn">Aduna</span>(<span class="kw">double</span> a, <span class="kw">double</span> b) => a + b;
+    <span class="kw">public string</span> <span class="fn">Aduna</span>(<span class="kw">string</span> a, <span class="kw">string</span> b) => a + b;
+}
+
+<span class="tp">Calculator</span> c = <span class="kw">new</span> <span class="tp">Calculator</span>();
+c.<span class="fn">Aduna</span>(<span class="num">2</span>, <span class="num">3</span>);           <span class="cm">// → int: 5</span>
+c.<span class="fn">Aduna</span>(<span class="num">2.5</span>, <span class="num">1.1</span>);       <span class="cm">// → double: 3.6</span>
+c.<span class="fn">Aduna</span>(<span class="str">"Ion"</span>, <span class="str">" Pop"</span>);  <span class="cm">// → string: "Ion Pop"</span></pre>
+  </div>
+
+  <h3>Polimorfism dinamic — la rulare</h3>
+  <p>Acesta se rezolvă <strong>în momentul rulării programului</strong> (runtime). Se bazează pe moștenire și pe cuvintele cheie <code>virtual</code> / <code>override</code>. Compilatorul nu știe dinainte ce metodă va fi chemată — depinde de ce obiect concret există în memorie.</p>
+
+  <h2 id="virtual-override">3. Cuvintele cheie <code>virtual</code> și <code>override</code></h2>
+  <p>Acestea sunt baza polimorfismului dinamic în C#.</p>
+  <ul>
+    <li><strong><code>virtual</code></strong> — în clasa de bază, marchează o metodă ca putând fi rescrisă de clasele derivate.</li>
+    <li><strong><code>override</code></strong> — în clasa derivată, rescrie comportamentul metodei din bază.</li>
+  </ul>
+
+  <div class="note green">
+    <strong>🔑 Regulă importantă</strong>
+    Dacă nu pui <code>virtual</code> în clasa de bază, clasele derivate nu pot suprascrie cu adevărat metoda. Pot să o „ascundă" cu <code>new</code>, dar asta e altceva și nu produce polimorfism dinamic.
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">C# — virtual și override</span><button class="copy-btn" onclick="copyCode(this)">Copiază</button></div>
+    <pre><span class="kw">class</span> <span class="tp">Animal</span>
+{
+    <span class="kw">public string</span> Nume;
+    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="kw">string</span> nume) { Nume = nume; }
+
+    <span class="cm">// virtual = poate fi rescrisă</span>
+    <span class="kw">public virtual void</span> <span class="fn">FaSunet</span>()
+        => Console.<span class="fn">WriteLine</span>(<span class="str">$"{Nume} face un sunet."</span>);
+}
+
+<span class="kw">class</span> <span class="tp">Caine</span> : <span class="tp">Animal</span>
+{
+    <span class="kw">public</span> <span class="fn">Caine</span>(<span class="kw">string</span> n) : <span class="kw">base</span>(n) { }
+
+    <span class="cm">// override = rescriem comportamentul</span>
+    <span class="kw">public override void</span> <span class="fn">FaSunet</span>()
+        => Console.<span class="fn">WriteLine</span>(<span class="str">$"{Nume}: Ham ham!"</span>);
+}
+
+<span class="kw">class</span> <span class="tp">Pisica</span> : <span class="tp">Animal</span>
+{
+    <span class="kw">public</span> <span class="fn">Pisica</span>(<span class="kw">string</span> n) : <span class="kw">base</span>(n) { }
+
+    <span class="kw">public override void</span> <span class="fn">FaSunet</span>()
+        => Console.<span class="fn">WriteLine</span>(<span class="str">$"{Nume}: Miau!"</span>);
+}</pre>
+  </div>
+
+  <h2 id="exemplu">4. Exemplu complet — magia polimorfismului</h2>
+  <p>Acum vine partea interesantă. Putem pune obiecte de tipuri diferite într-o listă de tip bază și apela aceeași metodă pe fiecare — fără niciun <code>if</code> sau <code>switch</code>.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">C# — Exemplu complet</span><button class="copy-btn" onclick="copyCode(this)">Copiază</button></div>
+    <pre><span class="kw">class</span> <span class="tp">Program</span>
+{
+    <span class="kw">static void</span> <span class="fn">Main</span>()
+    {
+        <span class="cm">// Lista de tip Animal, dar obiectele sunt de tipuri diferite</span>
+        <span class="tp">Animal</span>[] animale = {
+            <span class="kw">new</span> <span class="tp">Caine</span>(<span class="str">"Rex"</span>),
+            <span class="kw">new</span> <span class="tp">Pisica</span>(<span class="str">"Whiskers"</span>),
+            <span class="kw">new</span> <span class="tp">Caine</span>(<span class="str">"Buddy"</span>),
+            <span class="kw">new</span> <span class="tp">Animal</span>(<span class="str">"Misterios"</span>)
+        };
+
+        <span class="cm">// Același apel → rezultate diferite. Asta e polimorfismul!</span>
+        <span class="kw">foreach</span> (<span class="tp">Animal</span> a <span class="kw">in</span> animale)
+            a.<span class="fn">FaSunet</span>();
+    }
+}
+
+<span class="cm">/* Output:
+   Rex: Ham ham!
+   Whiskers: Miau!
+   Buddy: Ham ham!
+   Misterios face un sunet.
+*/</span></pre>
+  </div>
+
+  <p>C# verifică la rulare ce tip real are fiecare obiect și apelează metoda potrivită automat — asta se numește <strong>dispatch dinamic</strong>.</p>
+
+  <h2 id="abstract">5. Clase abstracte</h2>
+  <p>Uneori nu are sens să poți crea un obiect din clasa de bază. Un „Animal" generic nu există cu adevărat — există câini, pisici, păsări. Aici intră clasele <code>abstract</code>.</p>
+  <p>O clasă abstractă <strong>nu poate fi instanțiată direct</strong>. Metodele abstracte nu au corp — clasele derivate sunt obligate să le implementeze.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">C# — Clasă abstractă</span><button class="copy-btn" onclick="copyCode(this)">Copiază</button></div>
+    <pre><span class="kw">abstract class</span> <span class="tp">Forma</span>
+{
+    <span class="kw">public abstract double</span> <span class="fn">Arie</span>();
+    <span class="kw">public abstract double</span> <span class="fn">Perimetru</span>();
+
+    <span class="cm">// Metodă normală — moștenită de toate clasele derivate</span>
+    <span class="kw">public void</span> <span class="fn">Descrie</span>()
+        => Console.<span class="fn">WriteLine</span>(<span class="str">$"Arie={Arie():F2}, Perim={Perimetru():F2}"</span>);
+}
+
+<span class="kw">class</span> <span class="tp">Cerc</span> : <span class="tp">Forma</span>
+{
+    <span class="kw">double</span> _r;
+    <span class="kw">public</span> <span class="fn">Cerc</span>(<span class="kw">double</span> r) { _r = r; }
+    <span class="kw">public override double</span> <span class="fn">Arie</span>()      => Math.PI * _r * _r;
+    <span class="kw">public override double</span> <span class="fn">Perimetru</span>() => <span class="num">2</span> * Math.PI * _r;
+}
+
+<span class="kw">class</span> <span class="tp">Dreptunghi</span> : <span class="tp">Forma</span>
+{
+    <span class="kw">double</span> _l, _h;
+    <span class="kw">public</span> <span class="fn">Dreptunghi</span>(<span class="kw">double</span> l, <span class="kw">double</span> h) { _l = l; _h = h; }
+    <span class="kw">public override double</span> <span class="fn">Arie</span>()      => _l * _h;
+    <span class="kw">public override double</span> <span class="fn">Perimetru</span>() => <span class="num">2</span> * (_l + _h);
+}
+
+<span class="cm">// Utilizare:</span>
+<span class="tp">Forma</span>[] forme = { <span class="kw">new</span> <span class="tp">Cerc</span>(<span class="num">5</span>), <span class="kw">new</span> <span class="tp">Dreptunghi</span>(<span class="num">3</span>, <span class="num">4</span>) };
+<span class="kw">foreach</span> (<span class="kw">var</span> f <span class="kw">in</span> forme) f.<span class="fn">Descrie</span>();
+<span class="cm">// Arie=78.54, Perim=31.42
+// Arie=12.00, Perim=14.00</span></pre>
+  </div>
+
+  <h2 id="interfete">6. Interfețe</h2>
+  <p>Interfețele sunt similare claselor abstracte, dar mai flexibile. O clasă poate moșteni o singură clasă de bază, dar poate implementa <strong>oricâte interfețe</strong>.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">C# — Interfețe</span><button class="copy-btn" onclick="copyCode(this)">Copiază</button></div>
+    <pre><span class="kw">interface</span> <span class="tp">IDesenaabil</span>  { <span class="kw">void</span> <span class="fn">Deseneaza</span>(); }
+<span class="kw">interface</span> <span class="tp">ISalvabil</span>    { <span class="kw">void</span> <span class="fn">Salveaza</span>(); }
+
+<span class="cm">// O clasă implementează ambele interfețe</span>
+<span class="kw">class</span> <span class="tp">Patrat</span> : <span class="tp">IDesenaabil</span>, <span class="tp">ISalvabil</span>
+{
+    <span class="kw">double</span> _l;
+    <span class="kw">public</span> <span class="fn">Patrat</span>(<span class="kw">double</span> l) { _l = l; }
+    <span class="kw">public void</span> <span class="fn">Deseneaza</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">$"Pătrat {_l}x{_l}"</span>);
+    <span class="kw">public void</span> <span class="fn">Salveaza</span>()  => Console.<span class="fn">WriteLine</span>(<span class="str">"Salvat în fișier"</span>);
+}
+
+<span class="cm">// Polimorfism prin interfață</span>
+<span class="tp">IDesenaabil</span>[] obiecte = { <span class="kw">new</span> <span class="tp">Patrat</span>(<span class="num">4</span>), <span class="kw">new</span> <span class="tp">Patrat</span>(<span class="num">7</span>) };
+<span class="kw">foreach</span> (<span class="kw">var</span> o <span class="kw">in</span> obiecte) o.<span class="fn">Deseneaza</span>();</pre>
+  </div>
+
+  <h2 id="base">7. Cuvântul cheie <code>base</code></h2>
+  <p>Când rescrii o metodă, poți apela versiunea din clasa de bază cu <code>base.NumeMetoda()</code> și să adaugi comportament în plus, fără să rescrii totul de la zero.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">C# — base</span><button class="copy-btn" onclick="copyCode(this)">Copiază</button></div>
+    <pre><span class="kw">class</span> <span class="tp">Vehicul</span>
+{
+    <span class="kw">public virtual void</span> <span class="fn">Porneste</span>()
+        => Console.<span class="fn">WriteLine</span>(<span class="str">"Motorul pornește..."</span>);
+}
+
+<span class="kw">class</span> <span class="tp">Masina</span> : <span class="tp">Vehicul</span>
+{
+    <span class="kw">public override void</span> <span class="fn">Porneste</span>()
+    {
+        <span class="kw">base</span>.<span class="fn">Porneste</span>(); <span class="cm">// apelăm clasa de bază</span>
+        Console.<span class="fn">WriteLine</span>(<span class="str">"Verifică centura de siguranță."</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="tp">MasinaElectrica</span> : <span class="tp">Masina</span>
+{
+    <span class="kw">public override void</span> <span class="fn">Porneste</span>()
+    {
+        <span class="kw">base</span>.<span class="fn">Porneste</span>(); <span class="cm">// apelăm Masina, care apelează Vehicul</span>
+        Console.<span class="fn">WriteLine</span>(<span class="str">"Activează bateria silențios."</span>);
+    }
+}
+<span class="cm">/* Output pentru new MasinaElectrica().Porneste():
+   Motorul pornește...
+   Verifică centura de siguranță.
+   Activează bateria silențios.
+*/</span></pre>
+  </div>
+
+  <h2 id="greseli">8. Greșeli frecvente</h2>
+  <h3>Lipsă <code>virtual</code> în clasa de bază</h3>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">C# — Greșeală vs. Corect</span><button class="copy-btn" onclick="copyCode(this)">Copiază</button></div>
+    <pre><span class="cm">// ❌ GREȘIT — fără virtual, nu e polimorfism dinamic</span>
+<span class="kw">class</span> <span class="tp">Baza</span>    { <span class="kw">public void</span>     <span class="fn">Metoda</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">"Baza"</span>); }
+<span class="kw">class</span> <span class="tp">Derivata</span> : <span class="tp">Baza</span> { <span class="kw">public new void</span> <span class="fn">Metoda</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">"Derivata"</span>); }
+
+<span class="tp">Baza</span> obj = <span class="kw">new</span> <span class="tp">Derivata</span>();
+obj.<span class="fn">Metoda</span>(); <span class="cm">// ← Afișează "Baza"! Nu "Derivata". Surpriză!</span>
+
+<span class="cm">// ✅ CORECT — cu virtual și override</span>
+<span class="kw">class</span> <span class="tp">Baza2</span>    { <span class="kw">public virtual void</span>   <span class="fn">Metoda</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">"Baza"</span>); }
+<span class="kw">class</span> <span class="tp">Derivata2</span> : <span class="tp">Baza2</span> { <span class="kw">public override void</span> <span class="fn">Metoda</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">"Derivata"</span>); }
+
+<span class="tp">Baza2</span> obj2 = <span class="kw">new</span> <span class="tp">Derivata2</span>();
+obj2.<span class="fn">Metoda</span>(); <span class="cm">// ← Afișează "Derivata". Corect!</span></pre>
+  </div>
+
+  <h2 id="cand">9. Când să îl folosești</h2>
+  <p>Odată ce înțelegi polimorfismul, ai tentația să îl folosești peste tot. Dar există situații unde se potrivește și altele unde complici inutil codul.</p>
+
+  <h3>Folosește-l când:</h3>
+  <ul>
+    <li>Ai mai multe tipuri cu <strong>comportament comun</strong>, dar implementări diferite (animale, forme, vehicule, utilizatori cu roluri).</li>
+    <li>Vrei cod <strong>extensibil</strong> — adaugi tipuri noi fără să schimbi codul existent.</li>
+    <li>Lucrezi cu <strong>colecții eterogene</strong> — liste cu obiecte de tipuri diferite.</li>
+    <li>Vrei să elimini <strong>lanțuri de if/switch</strong> care verifică tipul obiectului.</li>
+  </ul>
+
+  <h3>Evită-l când:</h3>
+  <ul>
+    <li>Ai un singur tip și știi sigur că nu vei adăuga altele.</li>
+    <li>Ierarhia devine prea adâncă (mai mult de 3–4 niveluri) și greu de urmărit.</li>
+    <li>Comportamentele diferă atât de mult că nu are sens o clasă de bază comună.</li>
+  </ul>
+
+  <div class="note">
+    <strong>📝 Concluzie</strong>
+    Polimorfismul dinamic este unul din pilonii OOP. Odată stăpânit, vei scrie cod mult mai elegant și mai ușor de extins. Exersează cu exemple simple — animale, forme, vehicule — și treptat vei vedea cum se aplică în proiecte reale.
+  </div>
+
+</article>
+
+<footer><p>Nagomir Emilian · Practică de instruire · <span id="yr"></span></p></footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+document.getElementById('burger').addEventListener('click', () =>
+  document.getElementById('navLinks').classList.toggle('open'));
+
+function copyCode(btn) {
+  const text = btn.closest('.code-block').querySelector('pre').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copiat';
+    setTimeout(() => btn.textContent = 'Copiază', 2000);
+  });
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a =>
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  }));
+</script>
+</body>
+</html>

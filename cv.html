@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV — Nagomir Emilian</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="nav-brand">// <span>nagomir-emilian.cv</span></span>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Acasă</a></li>
+    <li><a href="cv.html" class="active">Curriculum Vitae</a></li>
+    <li><a href="probleme.html">Probleme Practică</a></li>
+    <li><a href="polimorfism.html">Polimorfism</a></li>
+    <li><a href="asumare.html">Asumare responsabilitate</a></li>
+  </ul>
+  <button class="burger" id="burger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-header">
+  <div class="badge">Curriculum Vitae</div>
+  <h1>Nagomir Emilian</h1>
+  <p>Student informatică · Practică de instruire 2025</p>
+</div>
+
+<div class="container">
+  <div class="cv-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="cv-sidebar">
+
+      <div class="card">
+        <!--
+          ══════════════════════════════════
+          FOTOGRAFIA DIN CV
+          Înlocuiește "poza-cv.jpg" cu
+          numele fișierului tău de imagine.
+          ══════════════════════════════════
+        -->
+        <div class="cv-photo-wrap">
+          <img
+            src="IMG_1753.jpg"
+            alt="Nagomir Emilian"
+            onerror="this.style.display='none'; document.getElementById('cv-fallback').style.display='flex';"
+          />
+          <div class="cv-photo-fallback" id="cv-fallback" style="display:none;">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            poza-cv.jpg
+          </div>
+        </div>
+        <div class="cv-name">Nagomir Emilian</div>
+        <div class="cv-role">Student Informatică</div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title">Contact</div>
+        <div class="contact-item">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          email@exemplu.com
+        </div>
+        <div class="contact-item">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8a16 16 0 0 0 6 6l.27-.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/></svg>
+          +373 xxx xxx xxx
+        </div>
+        <div class="contact-item">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Chișinău, Moldova
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title">Competențe</div>
+        <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+          <span class="tag">C#</span>
+          <span class="tag">OOP</span>
+          <span class="tag green">.NET</span>
+          <span class="tag green">Visual Studio</span>
+          <span class="tag purple">HTML & CSS</span>
+          <span class="tag purple">Git</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Algoritmi</span>
+          <span class="tag">After Effects</span>
+          <span class="tag">Premiere Pro</span>
+          <span class="tag purple">C++</span>
+          <span class="tag purple">JavaScript</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title">Limbi vorbite</div>
+
+        <div class="lang-row">
+          <div class="lang-wrap">
+            <div class="lang-name">Română</div>
+            <div class="lang-bar"><div class="lang-fill" style="width:100%"></div></div>
+          </div>
+          <span class="lang-lvl">Nativă</span>
+        </div>
+        <div class="lang-row">
+          <div class="lang-wrap">
+            <div class="lang-name">Rusă</div>
+            <div class="lang-bar"><div class="lang-fill" style="width:85%"></div></div>
+          </div>
+          <span class="lang-lvl">Avansat</span>
+        </div>
+        <div class="lang-row">
+          <div class="lang-wrap">
+            <div class="lang-name">Engleză</div>
+            <div class="lang-bar"><div class="lang-fill" style="width:65%"></div></div>
+          </div>
+          <span class="lang-lvl">Intermediar</span>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="cv-main">
+
+      <div class="card">
+        <div class="sec-title">Despre mine</div>
+        <p style="color:var(--muted); font-size:0.9rem; line-height:1.75;">
+          Sunt student la colegiu, specializarea Informatică, și în prezent îmi desfășor practica de instruire. Sunt pasionat de matematică încă din perioada școlii, participând la diverse olimpiade și concursuri, unde mi-am dezvoltat gândirea logică și capacitatea de analiză.
+
+Îmi place să descos orice problemă până în cele mai mici detalii și să găsesc soluții eficiente, indiferent de complexitatea acesteia. Sunt interesat în mod special de programarea orientată pe obiecte și de dezvoltarea aplicațiilor în C#, iar ceea ce mă motivează este să înțeleg nu doar cum funcționează un program, ci și principiile din spatele lui. Consider că fiecare provocare reprezintă o oportunitate de a învăța ceva nou și de a-mi dezvolta abilitățile tehnice.
+
+Pe lângă programare, am experiență în editare video, lucrând cu Adobe Premiere Pro și Adobe After Effects. Îmi place să combin partea tehnică cu cea creativă, realizând proiecte video care îmbină efecte vizuale, animații și un montaj dinamic.
+
+Sunt o persoană perseverentă, atentă la detalii și dornică să acumulez cunoștințe noi. Îmi place să lucrez atât individual, cât și în echipă, iar obiectivul meu este să mă dezvolt continuu în domeniul IT și al tehnologiilor digitale.
+
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="sec-title">Educație</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-date">2024 — prezent</div>
+            <div class="tl-title">Colegiu</div>
+            <div class="tl-place">Centru de Excelență în Economie și Finanțe, Chișinău</div>
+            <div class="tl-desc">Specializarea Informatică, Matematică. Programare, baze de date, algoritmi, rețele de calculatoare.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2013 — 2024</div>
+            <div class="tl-title">Liceu</div>
+            <div class="tl-place">IPLT Dragoș Vodă, Stăuceni</div>
+            <div class="tl-desc">Profil real cu accent pe matematică și informatică.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title">Experiență</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-date">2025</div>
+            <div class="tl-title">Practică de instruire</div>
+            <div class="tl-place">[Locul practicii]</div>
+            <div class="tl-desc">Rezolvarea problemelor în C#, aprofundarea OOP — polimorfism, moștenire, încapsulare.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">Proiecte personale</div>
+            <div class="tl-title">Aplicații de studiu</div>
+            <div class="tl-place">Individual</div>
+            <div class="tl-desc">Programe mici în C# pentru exersarea conceptelor: calculatoare, gestionare date, jocuri în consolă.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title">Interese</div>
+        <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+          <span class="tag">Programare</span>
+          <span class="tag green">Rezolvare probleme</span>
+          <span class="tag purple">Editare Video</span>
+          <span class="tag">Gaming</span>
+          <span class="tag green">Lectură</span>
+          <span class="tag">Matematică</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer><p>Nagomir Emilian · Practică de instruire · <span id="yr"></span></p></footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  document.getElementById('burger').addEventListener('click', () =>
+    document.getElementById('navLinks').classList.toggle('open'));
+</script>
+</body>
+</html>
